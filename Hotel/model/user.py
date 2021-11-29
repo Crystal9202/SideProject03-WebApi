@@ -1,7 +1,6 @@
 from Hotel import db
 from datetime import datetime ,timedelta
 from flask import current_app
-import jwt
 from werkzeug.security import generate_password_hash ,check_password_hash
 
 class UserModel(db.Model):
@@ -22,23 +21,18 @@ class UserModel(db.Model):
     def check_password(self ,password):
         return check_password_hash(self.password_hash ,password)
 
-    def generate_token(self):
-        try:
-            # set up a payload with an expiration time
-            payload = {
-                'exp':datetime.utcnow() + timedelta(minutes = 5) ,
-                'iat':datetime.utcnow(),
-                'sub':self.username
-            }
-            # create the string token using the payload and the SECRET key
-            jwt_token = jwt.encode(
-                payload , 
-                current_app.config.get("SECRET_KEY"),
-                algorithm = "HS256"
-            )
+    @staticmethod
+    def authenticate(username , password):
+        user = UserModel.query.filter(UserModel.username == username).first()
+        if user :
+            # check password
+            if user.check_password(password):
+                return user
+    
+    @staticmethod
+    def identity(payload):
+        user_id = payload['identity']
+        user = UserModel.query.filter(UserModel.id == user_id).first()
+        return user 
 
-            return jwt_token
-        except Exception as e :
-            # return an error
-            return str(e)
 
