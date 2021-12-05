@@ -64,7 +64,108 @@ step55 git add -A git commit -m "使用套件 flask-jwt 去實現 Token 的認�
 step56 第四次代碼重構, 在 model 的 user.py 中加入 get_by_username、add、update、delete、get_by_id 方法, 且更新 resource 的 user.py 檔, 使跟 db 無關
 step57 git add -A git commit -m "代碼重構"
 ------------------------------------------------------------------------------------------------------
-
+step58 在 model 內加入新的檔案 tweet.py 且新增 table Tweet, 這樣 UserModle 與 Tweet 就是一對多的關係
+step59 編輯 __init__.py 檔, 把 table Tweet 加進來, 也就是 from Hotel.model.tweet import Tweet
+step60 flask db migrate -> flask db upgrade 且觀看 flask shell 的 table 測試
+step61 在 resource 資料夾內加入 tweet.py 檔, 編寫 Tweet 資源, 加入 get 與 post 方法
+step62 編輯 __init__.py 檔, 幫資源 Tweet 註冊, api.add_resource(Tweet, "/tweet/<string:username>")
+step64 pip install python-dateutil, 要用來把 tweet 出來的世界協調時間當地化
+step65 在 resource 資料夾中的 tweet.py 檔中, 幫 get 與 post 方法加入權限認證
+step66 git add -A git commit -m "加入tweet資源"
+--------------------------------------------------------------------------------------------------------
+step67 pip install cryptography, 不然連接 MySQL 時會有以下的例外產生, 'cryptography' package is required for sha256_password or caching_sha2_password auth methods
+step68 加入權限細分, 比如在操作 post /tweets/Crysyal 時, 你所帶的 Token 的帳號要是跟 Crystal 一樣 
+step69 幫我們 /user/<username> 的 DELETE、PUT、PATCH 加上權限再細分, 除了 post /users 不用權限, 其他的先 @jwt_required() 就好
+step70 git add -A git commit -m "JWT Token 權限細分"
+---------------------------------------------------------------------------------------------------------
+step71 在 UserModel 加入 from_admin 字段, 讓權限又多了管理員的身分
+step72 flask db migrate -> flask db upgrade
+step73 編輯 __init.py 檔, 加入 register_commands() 函數, 並註冊
+step74 flask admin 加入管理員
+step75 git add -A git commit -m "權限再細分, 加入管理員"
+----------------------------------------------------------------------------------------------------------
+step76 第五次代碼重購, 因為 model 裡面的 class 裡面的方法很多重複, 我們可以寫個 Base 類, 再讓他們繼承, 減少重複
+step77 在 model 新增 base.py 檔, 把一樣的方法移動到 Base, 然後 User 跟 Tweet 換繼承 Base
+step78 git add -A git commit -m "代碼重購"
+----------------------------------------------------------------------------------------------------------
+step77 在 resource 的 tweet.py 檔新增資源 TweetList, 可以拿到全部留言
+step78 在 __init__.py 構造文件註冊資源 TweetList, 我們這個資源目前沒加權限, 不代 Token 也可以 GET
+step79 在 Model 的 user.py 與 tweet.py 加入 cascade (級聯操作), 只要帳號被刪掉, 跟他有關的留言也會跟這被刪除, 注意 cascade 該放的地方
+step80 不需要再 flask migrate 跟 flask upgrade
+step81 git add -A git commit -m "新增 TweetList 資源, 與加入 cascade 級聯操作"
+----------------------------------------------------------------------------------------------------------
+step82 在 model 新增 style.py 檔, 加入 class StyleModel
+step83 在 model 新增 room.py 檔, 加入 class RoomModel
+step84 注意 StyleModel   1 <--------->多 RoomModle 多 <----------------> 1 UserModel 1 <---------------->多 TweetModel
+step84 在 __init__.py 構造文件 import StyleModel 與 RoomModel 進來
+step85 flask db migrate -> flask db upgrade
+step86 git add -A git commit -m "新增 StyleModel 與 RoomModel"
+----------------------------------------------------------------------------------------------------------
+step87 在 resource 資料夾新增 style.py 檔, 且加入 StyleList 類, 並在 __init__.py 上註冊
+step88 在 resource 資料夾新增 room.py 檔, 且加入 RoomList 類, 並在 __init__.py 上註冊
+step89 在 room.py 檔中加入 RoomStyleList 類, 並在 __init__.py 上註冊
+step90 為 StyleList 與 RoomList 資源的方法加入權限
+step91 git add -A git commit -m "在 resource 資料夾加入 style.py 與 room.py 檔"
+-----------------------------------------------------------------------------------------------------------
+step92 在 resource 資料夾新增 reservation.py 檔, 且加入 Reservation 類, 並在 __init__.py 上註冊
+step93 在 resource 資料夾中的 room.py 檔中加入 Room 類, 並在 __init__.py 上註冊
+step94 git add -A git commit -m "新增 Reservation 類與 Room 類"
+-----------------------------------------------------------------------------------------------------------
+step95 第六次代碼重構, 重構 config.py 檔, 再修改 __init__.py 檔
+step96 git add -A git commit -m "第六次代碼重構"
+-----------------------------------------------------------------------------------------------------------
+step97 新增 tests 的包, 並在裡面加入 __init__.py 檔
+step98 新增與編輯 test_user_list.py, 先完成 test_user_create() 方法
+step99 python -m unittest discover
+step100 新增且編輯 test_login.py
+step101 回來 test_user_list.py, 完成 test_user_get() 方法
+step102 新增與編輯 test_user.py
+step103 python -m unittest discover
+step104 新增且編輯 test_tweet.py
+step105 python -m unittest discover
+step106 git add -A git commit -m "加入單元測試"
+-----------------------------------------------------------------------------------------------------------
+step107 第七次代碼重構, 在 tests 資料夾 新增 base.py檔, 在裡面新增 Base 類, 再讓大家繼承
+step108 python -m unittest discover
+step109 git add -A git commit -m "第七次代碼重構"
+-----------------------------------------------------------------------------------------------------------
+step110 修改 config.py
+step111 pip install gunicorn, gunicorn 符合 WSGI 的 Server, 在 windows 目前無法運行,因為 No module named 'fcntl'
+step112 在 Hotel 底下建立 wsgi.py 的檔案, 並編輯
+step113 觀看 Heroku 的安裝與準備, 並註冊 Heroku
+step114 PATH="$PATH:/c/Program Files/Heroku/bin"
+step115 試試 heroku 指令
+step116 新增與編輯 Procfile
+step117 pip freeze > requirements.txt, 並加上 psycopg2==2.8.1, Heroku上的資料庫 PostgreSQL 需要
+step118 git add -A git commit -m "準備部屬"
+------------------------------------------------------------------------------------------------------------
+step118 heroku login
+step119 heroku create --buildpack heroku/python
+step200 heroku addons:create heroku-postgresql:hobby-dev
+step201 git push heroku master
+step202 heroku run python
+step203 from Hotel import db, create_app
+        app = create_app(config_name='production')
+        with app.app_context():
+            db.create_all()
+step204 更新 config.py
+step205 git add -a git commit -m "更新程式碼"
+-------------------------------------------------------------------------------
+step206 更新 config.py, 加入 PROPAGATE_EXCEPTIONS=True
+step207 git add -a git commit -m "更新程式碼"
+-------------------------------------------------------------------------------
+step208 在 heroku 上用 with app.app_context():的方式加入管理員
+step209 git add -A git commit -m '在 heroku 加入管理員'
+-------------------------------------------------------------------------------
+step210 pip install tox==3.8
+step211 新增 tox.ini
+step212 執行 tox (或是 tox -e pep8)
+step213 git add -A git commit -m "pep8檢測"
+-------------------------------------------------------------------------------
+step214 在 resource 資料夾新增 Home 資源, 並編輯
+step215 在 __init__.py 註冊 Home 資源
+step216 git add -A git commit -m "增加首頁簡介"
+-------------------------------------------------------------------------------
 
 
 
