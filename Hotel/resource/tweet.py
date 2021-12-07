@@ -1,5 +1,4 @@
 from flask_restful import Resource ,reqparse
-import jwt
 from Hotel.model.tweet import TweetModel
 from Hotel.model.user import UserModel
 from flask_jwt import jwt_required ,current_identity
@@ -9,8 +8,6 @@ class TweetList(Resource):
     def get(self):
         tweets = TweetModel.query.all()
         return [tweet.as_dict() for tweet in tweets]
-
-
 
 
 class Tweet(Resource):

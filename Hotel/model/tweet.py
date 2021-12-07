@@ -28,5 +28,9 @@ class TweetModel(Base):
         t['created_at'] = t['created_at'].isoformat()  # 要加這個時間才會被序列化, 會把 datetime 類型轉乘字串
         return t
 
+    @staticmethod
+    def get_tweet_list():
+        return TweetModel.query.all()
+
 
 

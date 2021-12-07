@@ -9,6 +9,8 @@ from flask_jwt import JWT
 db=SQLAlchemy()
 from Hotel.model.user  import UserModel
 from Hotel.model.tweet import TweetModel 
+from Hotel.model.style import StyleModel
+from Hotel.model.room import RoomModel
 from Hotel.resource.user import UserList , User 
 from Hotel.resource.tweet import Tweet,TweetList
 from Hotel.config import Config
