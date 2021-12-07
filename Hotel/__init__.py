@@ -10,7 +10,7 @@ db=SQLAlchemy()
 from Hotel.model.user  import UserModel
 from Hotel.model.tweet import TweetModel 
 from Hotel.resource.user import UserList , User 
-from Hotel.resource.tweet import Tweet
+from Hotel.resource.tweet import Tweet,TweetList
 from Hotel.config import Config
 
 
@@ -23,11 +23,13 @@ def create_app():   #工廠函數
     db.init_app(app)
     jwt.init_app(app)
     migrate=Migrate(app,db)
-    register_commands(app)
+    
 
     api.add_resource(UserList ,"/users")
     api.add_resource(User, '/user/<string:username>')
     api.add_resource(Tweet,"/tweets/<string:username>")
+    api.add_resource(TweetList,"/tweets")
+    register_commands(app)
     return app
 
 
