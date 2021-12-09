@@ -13,3 +13,10 @@ class RoomModel(Base):
     style =db.relationship('StyleModel' ,back_populates ='rooms')
     user = db.relationship('UserModel',back_populates ='rooms')
 
+    @staticmethod
+    def get_room_list():
+        return RoomModel.query.all()
+
+    def get_by_name(name):
+        return RoomModel.query.filter(RoomModel.name == name).first()
+
