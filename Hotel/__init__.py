@@ -14,7 +14,8 @@ from Hotel.model.room import RoomModel
 from Hotel.resource.user import UserList , User 
 from Hotel.resource.tweet import Tweet,TweetList
 from Hotel.resource.style import StyleList
-from Hotel.resource.room import RoomList ,Room
+from Hotel.resource.room import RoomList ,RoomStyleList ,Room
+from Hotel.resource.reservation import Reservation
 from Hotel.config import Config
 
 
@@ -35,7 +36,9 @@ def create_app():   #工廠函數
     api.add_resource(TweetList,"/tweets")
     api.add_resource(StyleList ,"/styles")
     api.add_resource(RoomList,"/rooms")
-    api.add_resource(Room,"/rooms/<string:stylename>")
+    api.add_resource(RoomStyleList,"/rooms/<string:stylename>")
+    api.add_resource(Room,"/room/<string:roomname>")
+    api.add_resource(Reservation,"/reservation/<string:username>")
     register_commands(app)
     return app
 

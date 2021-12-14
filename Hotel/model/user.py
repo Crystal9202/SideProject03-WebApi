@@ -47,3 +47,8 @@ class UserModel(Base):
     def get_by_list():
         return UserModel.query.all()
 
+    @staticmethod
+    def get_by_id(user_id):
+        user=UserModel.query.filter(UserModel.id == user_id).first()
+        return user
+
